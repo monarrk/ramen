@@ -48,18 +48,27 @@ impl Vram {
         Vram::get().ptr
     }
 
-    pub unsafe fn set_color(coord: Vec2<i32>, rgb: RGB8) {
+    pub fn set_color(coord: Vec2<i32>, rgb: RGB8) {
         let vram = Self::get();
+
+        if coord.cmplt(&Vec2::zero()).iter().any(|x| *x)
+            || coord
+                .cmpgt(&(vram.resolution - Vec2::one()))
+                .iter()
+                .any(|x| *x)
+        {
+            panic!("Tried to draw out of screen: {}", coord);
+        }
 
         let offset_from_base = (coord.y * Vram::resolution().x + coord.x) * vram.bits_per_pixel / 8;
 
-        let ptr = vram.ptr.as_mut_ptr::<u8>().offset(offset_from_base as _);
+        unsafe {
+            let ptr = vram.ptr.as_mut_ptr::<u8>().offset(offset_from_base as _);
 
-        // The order of `RGB` is right.
-        // See: https://wiki.osdev.org/Drawing_In_Protected_Mode
-        ptr::write(ptr.offset(0), rgb.b);
-        ptr::write(ptr.offset(1), rgb.g);
-        ptr::write(ptr.offset(2), rgb.r);
+            ptr::write(ptr.offset(0), rgb.b);
+            ptr::write(ptr.offset(1), rgb.g);
+            ptr::write(ptr.offset(2), rgb.r);
+        }
     }
 
     fn new(boot_info: &kernelboot::Info) -> Self {

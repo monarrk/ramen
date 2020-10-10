@@ -73,9 +73,7 @@ impl Screen {
     pub fn draw_rectangle(color: RGB8, top_left: Vec2<i32>, bottom_right: Vec2<i32>) {
         for y in top_left.y..=bottom_right.y {
             for x in top_left.x..=bottom_right.x {
-                unsafe {
-                    Vram::set_color(Vec2::new(x, y), color);
-                }
+                Vram::set_color(Vec2::new(x, y), color);
             }
         }
     }
