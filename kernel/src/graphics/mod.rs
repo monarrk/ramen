@@ -5,12 +5,14 @@ pub mod font;
 #[macro_use]
 pub mod screen;
 
-use common::{constant::VRAM_ADDR, kernelboot};
-use conquer_once::spin::{Lazy, OnceCell};
-use core::{fmt, ptr};
-use rgb::RGB8;
-use vek::Vec2;
-use x86_64::VirtAddr;
+use {
+    common::{constant::VRAM_ADDR, kernelboot},
+    conquer_once::spin::{Lazy, OnceCell},
+    core::{fmt, ptr},
+    rgb::RGB8,
+    vek::Vec2,
+    x86_64::VirtAddr,
+};
 
 static VRAM: Lazy<OnceCell<Vram>> = Lazy::new(OnceCell::uninit);
 
