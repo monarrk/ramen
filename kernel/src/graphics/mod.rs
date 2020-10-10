@@ -8,7 +8,11 @@ pub mod screen;
 use {
     common::{constant::VRAM_ADDR, kernelboot},
     conquer_once::spin::{Lazy, OnceCell},
-    core::{fmt, ptr},
+    core::{
+        fmt,
+        ops::{Index, IndexMut},
+        ptr,
+    },
     rgb::RGB8,
     vek::Vec2,
     x86_64::VirtAddr,
@@ -25,8 +29,7 @@ pub struct Vram {
 
 impl Vram {
     pub fn init(boot_info: &kernelboot::Info) {
-        VRAM.try_init_once(|| Self::new_from_boot_info(boot_info))
-            .unwrap();
+        VRAM.try_init_once(|| Self::new(boot_info)).unwrap();
     }
 
     pub fn resolution() -> &'static Vec2<i32> {
@@ -58,20 +61,17 @@ impl Vram {
         ptr::write(ptr.offset(1), rgb.g);
         ptr::write(ptr.offset(2), rgb.r);
     }
-    fn new_from_boot_info(boot_info: &kernelboot::Info) -> Self {
+
+    fn new(boot_info: &kernelboot::Info) -> Self {
         let vram = boot_info.vram();
 
         let (x_len, y_len) = vram.resolution();
         let resolution = Vec2::new(x_len, y_len);
 
-        Self::new(vram.bpp(), resolution, VRAM_ADDR)
-    }
-
-    fn new(bits_per_pixel: i32, resolution: Vec2<i32>, ptr: VirtAddr) -> Self {
         Self {
-            bits_per_pixel,
+            bits_per_pixel: vram.bpp(),
             resolution,
-            ptr,
+            ptr: VRAM_ADDR,
         }
     }
 
