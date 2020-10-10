@@ -110,3 +110,8 @@ impl Bgr {
         Self { b, g, r, _alpha: 0 }
     }
 }
+impl From<RGB8> for Bgr {
+    fn from(rgb: RGB8) -> Self {
+        Bgr::new(rgb.b, rgb.g, rgb.r)
+    }
+}
