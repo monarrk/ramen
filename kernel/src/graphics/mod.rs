@@ -88,7 +88,6 @@ impl Vram {
         VRAM.try_get().expect("VRAM not initialized")
     }
 }
-
 impl fmt::Display for Vram {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
