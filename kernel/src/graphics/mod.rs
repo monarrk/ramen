@@ -105,8 +105,3 @@ struct Bgr {
     r: u8,
     _alpha: u8,
 }
-impl Bgr {
-    fn new(b: u8, g: u8, r: u8) -> Self {
-        Self { b, g, r, _alpha: 0 }
-    }
-}
