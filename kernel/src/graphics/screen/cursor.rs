@@ -9,6 +9,8 @@ use {
 };
 
 pub struct Cursor {
+    // This value can be negative.
+    // If it is, some parts of the cursor will be hidden.
     coord: Vec2<i32>,
     id: screen_layer::Id,
 }
@@ -55,7 +57,7 @@ impl Cursor {
 
     fn fit_in_screen(&mut self) {
         self.coord = Vec2::<i32>::max(
-            Vec2::min(self.coord, *Vram::resolution() - Vec2::one()),
+            Vec2::min(self.coord, Vram::resolution().as_() - Vec2::one()),
             Vec2::zero(),
         );
     }

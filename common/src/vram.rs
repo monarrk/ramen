@@ -10,9 +10,9 @@ use {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Info {
-    bpp: i32,
-    screen_x: i32,
-    screen_y: i32,
+    bpp: u32,
+    screen_x: u32,
+    screen_y: u32,
     ptr: PhysAddr,
 }
 
@@ -22,21 +22,19 @@ impl Info {
 
         Self {
             bpp: 32,
-            screen_x: i32::try_from(screen_x)
-                .expect("The width of screen resolution overflowed i32"),
-            screen_y: i32::try_from(screen_y)
-                .expect("The height of screen resolution overflowed i32"),
+            screen_x: u32::try_from(screen_x).unwrap(),
+            screen_y: u32::try_from(screen_y).unwrap(),
             ptr: PhysAddr::new(gop.frame_buffer().as_mut_ptr() as u64),
         }
     }
 
     #[must_use]
-    pub fn bpp(&self) -> i32 {
+    pub fn bpp(&self) -> u32 {
         self.bpp
     }
 
     #[must_use]
-    pub fn resolution(&self) -> (i32, i32) {
+    pub fn resolution(&self) -> (u32, u32) {
         (self.screen_x, self.screen_y)
     }
 

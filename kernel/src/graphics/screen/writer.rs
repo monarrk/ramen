@@ -8,12 +8,12 @@ use {
 };
 
 pub struct Writer {
-    coord: Vec2<i32>,
+    coord: Vec2<u32>,
     color: RGB8,
 }
 
 impl Writer {
-    pub const fn new(coord: Vec2<i32>, color: RGB8) -> Self {
+    pub const fn new(coord: Vec2<u32>, color: RGB8) -> Self {
         Self { coord, color }
     }
 
@@ -35,15 +35,15 @@ impl Writer {
 
     fn break_line(&mut self) {
         self.coord.x = 0;
-        self.coord.y += i32::try_from(font::FONT_HEIGHT).unwrap();
+        self.coord.y += u32::try_from(font::FONT_HEIGHT).unwrap();
     }
 
     fn move_cursor_by_one_character(&mut self) {
-        self.coord.x += i32::try_from(font::FONT_WIDTH).unwrap();
+        self.coord.x += u32::try_from(font::FONT_WIDTH).unwrap();
     }
 
     fn cursor_is_outside_screen(&self) -> bool {
-        self.coord.x + i32::try_from(font::FONT_WIDTH).unwrap() >= Vram::resolution().x
+        self.coord.x + u32::try_from(font::FONT_WIDTH).unwrap() >= Vram::resolution().x
     }
 
     fn print_char(&self, font: [[bool; font::FONT_WIDTH]; font::FONT_HEIGHT]) {
