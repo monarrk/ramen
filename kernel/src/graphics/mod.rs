@@ -97,3 +97,11 @@ impl fmt::Display for Vram {
         )
     }
 }
+
+#[repr(C, packed)]
+struct Bgr {
+    b: u8,
+    g: u8,
+    r: u8,
+    _alpha: u8,
+}
