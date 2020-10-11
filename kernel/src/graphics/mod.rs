@@ -9,9 +9,10 @@ use {
     common::{constant::VRAM_ADDR, kernelboot},
     conquer_once::spin::{Lazy, OnceCell},
     core::{
+        convert::TryFrom,
         fmt,
         ops::{Index, IndexMut},
-        ptr,
+        ptr, slice,
     },
     rgb::RGB8,
     vek::Vec2,
@@ -95,9 +96,43 @@ impl fmt::Display for Vram {
         )
     }
 }
+impl Index<usize> for Vram {
+    type Output = [Bgr];
+
+    fn index(&self, index: usize) -> &Self::Output {
+        let vram = Self::get();
+
+        assert!(index < usize::try_from(vram.resolution.y).unwrap());
+
+        let offset_from_base =
+            (u32::try_from(index).unwrap() * vram.resolution.x) * vram.bits_per_pixel / 8;
+
+        let ptr = vram.ptr.as_u64() + u64::from(offset_from_base);
+
+        unsafe {
+            slice::from_raw_parts(ptr as *const _, usize::try_from(vram.resolution.x).unwrap())
+        }
+    }
+}
+impl IndexMut<usize> for Vram {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        let vram = Self::get();
+
+        assert!(index < usize::try_from(vram.resolution.y).unwrap());
+
+        let offset_from_base =
+            (u32::try_from(index).unwrap() * vram.resolution.x) * vram.bits_per_pixel / 8;
+
+        let ptr = vram.ptr.as_u64() + u64::from(offset_from_base);
+
+        unsafe {
+            slice::from_raw_parts_mut(ptr as *mut _, usize::try_from(vram.resolution.x).unwrap())
+        }
+    }
+}
 
 #[repr(C, packed)]
-struct Bgr {
+pub struct Bgr {
     b: u8,
     g: u8,
     r: u8,
