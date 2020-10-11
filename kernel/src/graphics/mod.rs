@@ -105,3 +105,13 @@ struct Bgr {
     r: u8,
     _alpha: u8,
 }
+impl From<RGB8> for Bgr {
+    fn from(rgb: RGB8) -> Self {
+        Bgr {
+            b: rgb.b,
+            g: rgb.g,
+            r: rgb.r,
+            _alpha: 0,
+        }
+    }
+}
