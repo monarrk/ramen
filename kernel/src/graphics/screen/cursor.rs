@@ -9,6 +9,9 @@ use {
 };
 
 pub struct Cursor {
+    // Althouth the coordinate will not be negative, signed type is used because when subtracting
+    // a large value from unsigned small value, an overflow will be happen if the type of
+    // the coordinate is unsigned.
     coord: Vec2<i32>,
     id: screen_layer::Id,
 }
@@ -55,7 +58,7 @@ impl Cursor {
 
     fn fit_in_screen(&mut self) {
         self.coord = Vec2::<i32>::max(
-            Vec2::min(self.coord, *Vram::resolution() - Vec2::one()),
+            Vec2::min(self.coord, Vram::resolution().as_() - Vec2::one()),
             Vec2::zero(),
         );
     }

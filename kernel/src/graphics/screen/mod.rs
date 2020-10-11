@@ -65,16 +65,3 @@ const MOUSE_GRAPHIC: [[char; MOUSE_CURSOR_WIDTH]; MOUSE_CURSOR_HEIGHT] = [
         '.', '.', '.', '.', '.', '.', '*', '.', '.', '.', '.', '.', '.', '.', '.', '.',
     ],
 ];
-
-pub struct Screen;
-
-impl Screen {
-    // TODO: Specify top left coordinate and length, rather than two coordinates.
-    pub fn draw_rectangle(color: RGB8, top_left: Vec2<i32>, bottom_right: Vec2<i32>) {
-        for y in top_left.y..=bottom_right.y {
-            for x in top_left.x..=bottom_right.x {
-                Vram::set_color(Vec2::new(x, y), color);
-            }
-        }
-    }
-}

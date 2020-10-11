@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-use crate::graphics::screen::Screen;
 use crate::graphics::Vram;
 use rgb::RGB8;
 use vek::Vec2;

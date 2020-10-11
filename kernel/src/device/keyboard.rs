@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 use {
-    crate::graphics::screen::Screen,
     common::constant::{
         KEY_CMD_MODE, KEY_CMD_WRITE_MODE, KEY_STATUS_SEND_NOT_READY, PORT_KEY_CMD, PORT_KEY_DATA,
         PORT_KEY_STATUS,
@@ -73,11 +72,6 @@ pub async fn task() {
     let mut scancode_stream = ScancodeStream;
 
     while let Some(code) = scancode_stream.next().await {
-        Screen::draw_rectangle(
-            RGB8::new(0, 0x84, 0x84),
-            Vec2::new(0, 16),
-            Vec2::new(15, 31),
-        );
         info!("{:} pressed.", code as char);
     }
 }
