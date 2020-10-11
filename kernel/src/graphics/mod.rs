@@ -8,11 +8,7 @@ pub mod screen;
 use {
     common::{constant::VRAM_ADDR, kernelboot},
     conquer_once::spin::{Lazy, OnceCell},
-    core::{
-        fmt,
-        ops::{Index, IndexMut},
-        ptr,
-    },
+    core::{fmt, ptr},
     rgb::RGB8,
     vek::Vec2,
     x86_64::VirtAddr,
@@ -96,12 +92,4 @@ impl fmt::Display for Vram {
             self.bits_per_pixel, self.resolution.x, self.resolution.y
         )
     }
-}
-
-#[repr(C, packed)]
-struct Bgr {
-    b: u8,
-    g: u8,
-    r: u8,
-    _alpha: u8,
 }
