@@ -5,7 +5,7 @@ use {
     spinning_top::Spinlock,
 };
 
-pub static CONTROLLER: OnceCell<Spinlock<screen_layer::Controller>> = OnceCell::uninit();
+static CONTROLLER: OnceCell<Spinlock<screen_layer::Controller>> = OnceCell::uninit();
 
 pub fn init() {
     CONTROLLER
@@ -21,7 +21,7 @@ pub fn init() {
         .expect("Layer controller is already initialized.")
 }
 
-pub(super) fn get_controller() -> &'static Spinlock<screen_layer::Controller> {
+pub fn get_controller() -> &'static Spinlock<screen_layer::Controller> {
     CONTROLLER
         .try_get()
         .expect("Layer controller is not initialized.")
