@@ -65,7 +65,9 @@ impl Vram {
         unsafe {
             let ptr = vram.ptr.as_u64() + u64::from(offset_from_base);
 
-            ptr::write(ptr as *mut _, Bgr::from(rgb));
+            ptr::write(ptr as *mut u8, rgb.b);
+            ptr::write((ptr + 1) as *mut u8, rgb.g);
+            ptr::write((ptr + 2) as *mut u8, rgb.r);
         }
     }
 
