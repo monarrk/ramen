@@ -6,11 +6,7 @@ pub mod layer;
 pub mod log;
 pub mod writer;
 
-use {
-    super::{font, Vram},
-    rgb::RGB8,
-    vek::Vec2,
-};
+use super::{font, Vram};
 
 pub const MOUSE_CURSOR_WIDTH: usize = 16;
 pub const MOUSE_CURSOR_HEIGHT: usize = 16;

@@ -15,8 +15,6 @@ use {
         stream::{Stream, StreamExt},
         task::AtomicWaker,
     },
-    rgb::RGB8,
-    vek::Vec2,
 };
 
 static SCANCODE_QUEUE: OnceCell<ArrayQueue<u8>> = OnceCell::uninit();
