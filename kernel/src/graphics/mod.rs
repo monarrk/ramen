@@ -86,17 +86,6 @@ impl Vram {
     fn get() -> &'static Vram {
         VRAM.try_get().expect("VRAM not initialized")
     }
-
-    fn get_ptr_to_row(index: usize) -> u64 {
-        let vram = Self::get();
-
-        assert!(index < usize::try_from(vram.resolution.y).unwrap());
-
-        let offset_from_base =
-            (u32::try_from(index).unwrap() * vram.resolution.x) * vram.bits_per_pixel / 8;
-
-        vram.ptr.as_u64() + u64::from(offset_from_base)
-    }
 }
 impl fmt::Display for Vram {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -111,21 +100,33 @@ impl Index<usize> for Vram {
     type Output = [Bgr];
 
     fn index(&self, index: usize) -> &Self::Output {
+        let vram = Self::get();
+
+        assert!(index < usize::try_from(vram.resolution.y).unwrap());
+
+        let offset_from_base =
+            (u32::try_from(index).unwrap() * vram.resolution.x) * vram.bits_per_pixel / 8;
+
+        let ptr = vram.ptr.as_u64() + u64::from(offset_from_base);
+
         unsafe {
-            slice::from_raw_parts(
-                Self::get_ptr_to_row(index) as *const _,
-                usize::try_from(Self::resolution().x).unwrap(),
-            )
+            slice::from_raw_parts(ptr as *const _, usize::try_from(vram.resolution.x).unwrap())
         }
     }
 }
 impl IndexMut<usize> for Vram {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        let vram = Self::get();
+
+        assert!(index < usize::try_from(vram.resolution.y).unwrap());
+
+        let offset_from_base =
+            (u32::try_from(index).unwrap() * vram.resolution.x) * vram.bits_per_pixel / 8;
+
+        let ptr = vram.ptr.as_u64() + u64::from(offset_from_base);
+
         unsafe {
-            slice::from_raw_parts_mut(
-                Self::get_ptr_to_row(index) as *mut _,
-                usize::try_from(Self::resolution().x).unwrap(),
-            )
+            slice::from_raw_parts_mut(ptr as *mut _, usize::try_from(vram.resolution.x).unwrap())
         }
     }
 }
