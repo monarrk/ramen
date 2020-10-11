@@ -63,7 +63,7 @@ impl Vram {
         let offset_from_base = (coord.y * Vram::resolution().x + coord.x) * vram.bits_per_pixel / 8;
 
         unsafe {
-            let ptr = vram.ptr.as_u64() + offset_from_base as u64;
+            let ptr = vram.ptr.as_u64() + u64::from(offset_from_base);
 
             ptr::write(ptr as *mut u8, rgb.b);
             ptr::write((ptr + 1) as *mut u8, rgb.g);
